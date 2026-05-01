@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Empresa con Impacto Social y Económico en México</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Source+Serif+4:wght@300;400;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
   <style>
     :root {
       --ink: #1a1208;
@@ -436,6 +437,104 @@
     .conclusion-box p { color: rgba(255,255,255,0.85); margin-bottom: 1rem; }
     .conclusion-box p:last-child { margin: 0; }
 
+    /* ── CHART CARDS ── */
+    .charts-section {
+      margin-top: 3rem;
+    }
+
+    .chart-card {
+      background: white;
+      border-radius: 0;
+      overflow: hidden;
+      box-shadow: 0 2px 20px rgba(26,18,8,0.07);
+      border: 1px solid var(--light-border);
+      margin-bottom: 1.8rem;
+    }
+
+    .chart-card-header {
+      padding: 1.3rem 1.6rem 1rem;
+      border-bottom: 1px solid var(--light-border);
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+
+    .chart-badge {
+      width: 38px; height: 38px;
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .chart-badge-teal  { background: #e8f4f4; }
+    .chart-badge-rust  { background: #fdf0eb; }
+    .chart-badge-gold  { background: #fdf6e3; }
+
+    .chart-card-header h4 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 0.2rem;
+      color: var(--ink);
+    }
+
+    .chart-card-header p {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin: 0;
+      line-height: 1.4;
+    }
+
+    .chart-wrap {
+      padding: 1.2rem 1.2rem 0.6rem;
+      position: relative;
+      height: 280px;
+    }
+
+    .chart-insight-row {
+      display: flex;
+      border-top: 1px solid var(--light-border);
+    }
+
+    .chart-insight {
+      flex: 1;
+      padding: 0.9rem 1rem;
+      border-right: 1px solid var(--light-border);
+      text-align: center;
+    }
+
+    .chart-insight:last-child { border-right: none; }
+
+    .chart-insight .val {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--accent2);
+    }
+
+    .chart-insight .val.rust { color: var(--accent); }
+    .chart-insight .val.gold { color: var(--gold); }
+
+    .chart-insight .lbl {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.68rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-top: 2px;
+    }
+
+    .charts-note {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--muted);
+      text-align: center;
+      margin-top: 0.5rem;
+      letter-spacing: 0.08em;
+    }
+
     /* ── FOOTER ── */
     footer {
       background: var(--ink);
@@ -657,6 +756,64 @@
       </div>
     </div>
 
+    <!-- CHARTS -->
+    <div class="charts-section">
+      <div class="section-label" style="margin-bottom:1rem;">Datos y gráficas — análisis ilustrativo</div>
+
+      <!-- Elasticidad -->
+      <div class="chart-card">
+        <div class="chart-card-header">
+          <div class="chart-badge chart-badge-teal">📉</div>
+          <div>
+            <h4>Elasticidad de la Demanda</h4>
+            <p>Los pasteles son bienes no esenciales → demanda elástica. Al subir el precio, la cantidad demandada cae considerablemente.</p>
+          </div>
+        </div>
+        <div class="chart-wrap"><canvas id="chartElasticidad"></canvas></div>
+        <div class="chart-insight-row">
+          <div class="chart-insight"><div class="val">−1.8</div><div class="lbl">Elasticidad</div></div>
+          <div class="chart-insight"><div class="val">Elástica</div><div class="lbl">Tipo de demanda</div></div>
+          <div class="chart-insight"><div class="val">+10% precio</div><div class="lbl">→ −18% demanda</div></div>
+        </div>
+      </div>
+
+      <!-- Punto de equilibrio -->
+      <div class="chart-card">
+        <div class="chart-card-header">
+          <div class="chart-badge chart-badge-rust">⚖️</div>
+          <div>
+            <h4>Punto de Equilibrio</h4>
+            <p>Intersección entre ingresos totales y costos totales. Por debajo: pérdida. Por encima: ganancia.</p>
+          </div>
+        </div>
+        <div class="chart-wrap"><canvas id="chartEquilibrio"></canvas></div>
+        <div class="chart-insight-row">
+          <div class="chart-insight"><div class="val rust">250 pasteles</div><div class="lbl">Punto de equilibrio</div></div>
+          <div class="chart-insight"><div class="val rust">$12,500</div><div class="lbl">Ingreso mínimo</div></div>
+          <div class="chart-insight"><div class="val rust">$8,000</div><div class="lbl">Costos fijos/mes</div></div>
+        </div>
+      </div>
+
+      <!-- Inflación -->
+      <div class="chart-card">
+        <div class="chart-card-header">
+          <div class="chart-badge chart-badge-gold">📈</div>
+          <div>
+            <h4>Impacto de la Inflación en Costos</h4>
+            <p>Aumento acumulado en el precio de insumos clave de 2020 a 2024 (harina, azúcar, mantequilla).</p>
+          </div>
+        </div>
+        <div class="chart-wrap"><canvas id="chartInflacion"></canvas></div>
+        <div class="chart-insight-row">
+          <div class="chart-insight"><div class="val gold">+47%</div><div class="lbl">Harina (2020–24)</div></div>
+          <div class="chart-insight"><div class="val gold">+38%</div><div class="lbl">Azúcar (2020–24)</div></div>
+          <div class="chart-insight"><div class="val gold">+55%</div><div class="lbl">Mantequilla (2020–24)</div></div>
+        </div>
+      </div>
+
+      <p class="charts-note">Datos hipotéticos con fines educativos · Proyecto académico</p>
+    </div>
+
     <h3>Consecuencias económicas actuales y su efecto en La Zarza</h3>
     <p>El entorno macroeconómico en México presenta varios desafíos que impactan directamente en empresas del sector alimentario como La Zarza:</p>
 
@@ -692,5 +849,104 @@
   <p style="margin-top:0.5rem;">Fuentes: CONEVAL 2022 · INEGI · Datos públicos del sector alimentario mexicano</p>
 </footer>
 
+<script>
+const chartFont = "'Source Serif 4', serif";
+const monoFont = "'DM Mono', monospace";
+
+// ── 1. ELASTICIDAD
+const preciosEl = [30,35,40,45,50,55,60,65,70];
+const cantidadEl = preciosEl.map(p => Math.max(0, 600 - 9*p));
+new Chart(document.getElementById('chartElasticidad'), {
+  type: 'line',
+  data: {
+    labels: preciosEl.map(p => '$'+p),
+    datasets: [{
+      label: 'Pasteles demandados',
+      data: cantidadEl,
+      borderColor: '#2d6a4f',
+      backgroundColor: 'rgba(45,106,79,0.08)',
+      borderWidth: 2.5,
+      pointRadius: 4,
+      pointBackgroundColor: '#2d6a4f',
+      tension: 0.35,
+      fill: true,
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          title: ctx => 'Precio: '+ctx[0].label,
+          label: ctx => ' Cantidad: '+ctx.parsed.y+' pasteles'
+        }
+      }
+    },
+    scales: {
+      x: { title: { display: true, text: 'Precio por pastel ($MXN)', font: { size: 11 } }, grid: { color: 'rgba(0,0,0,0.05)' } },
+      y: { title: { display: true, text: 'Cantidad demandada', font: { size: 11 } }, grid: { color: 'rgba(0,0,0,0.05)' }, beginAtZero: true }
+    }
+  }
+});
+
+// ── 2. PUNTO DE EQUILIBRIO
+const unidades = [0,50,100,150,200,250,300,350,400];
+const costoTotal   = unidades.map(u => 8000 + 18*u);
+const ingresoTotal = unidades.map(u => 50*u);
+new Chart(document.getElementById('chartEquilibrio'), {
+  type: 'line',
+  data: {
+    labels: unidades,
+    datasets: [
+      { label: 'Ingresos totales', data: ingresoTotal, borderColor: '#2d6a4f', backgroundColor: 'transparent', borderWidth: 2.5, pointRadius: 3, tension: 0 },
+      { label: 'Costos totales',   data: costoTotal,   borderColor: '#c94f1a', backgroundColor: 'transparent', borderWidth: 2.5, borderDash: [6,3], pointRadius: 3, tension: 0 },
+      { label: 'Costos fijos',     data: unidades.map(()=>8000), borderColor: '#c9841a', backgroundColor: 'transparent', borderWidth: 1.5, borderDash: [3,4], pointRadius: 0, tension: 0 }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      legend: { display: true, labels: { font: { size: 11 }, boxWidth: 16, padding: 12 } },
+      tooltip: {
+        callbacks: {
+          title: ctx => ctx[0].label+' pasteles',
+          label: ctx => ' '+ctx.dataset.label+': $'+ctx.parsed.y.toLocaleString()
+        }
+      }
+    },
+    scales: {
+      x: { title: { display: true, text: 'Unidades vendidas', font: { size: 11 } }, grid: { color: 'rgba(0,0,0,0.05)' } },
+      y: { title: { display: true, text: 'Pesos MXN ($)', font: { size: 11 } }, grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { callback: v => '$'+v.toLocaleString() } }
+    }
+  }
+});
+
+// ── 3. INFLACIÓN
+new Chart(document.getElementById('chartInflacion'), {
+  type: 'bar',
+  data: {
+    labels: ['2020','2021','2022','2023','2024'],
+    datasets: [
+      { label: 'Harina',       data: [100,108,121,137,147], backgroundColor: 'rgba(45,106,79,0.75)',   borderRadius: 5, borderSkipped: false },
+      { label: 'Azúcar',       data: [100,106,116,128,138], backgroundColor: 'rgba(201,79,26,0.75)',   borderRadius: 5, borderSkipped: false },
+      { label: 'Mantequilla',  data: [100,112,128,145,155], backgroundColor: 'rgba(201,132,26,0.85)',  borderRadius: 5, borderSkipped: false }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      legend: { display: true, labels: { font: { size: 11 }, boxWidth: 14, padding: 12 } },
+      tooltip: {
+        callbacks: { label: ctx => ' '+ctx.dataset.label+': índice '+ctx.parsed.y+' (base 100 = 2020)' }
+      }
+    },
+    scales: {
+      x: { grid: { display: false } },
+      y: { title: { display: true, text: 'Índice de precio (base 100 = 2020)', font: { size: 11 } }, grid: { color: 'rgba(0,0,0,0.05)' }, min: 90 }
+    }
+  }
+});
+</script>
 </body>
 </html>
